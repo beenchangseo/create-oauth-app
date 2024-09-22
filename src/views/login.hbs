@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Login Page</title>
+    </head>
+    <body>
+        <h1>로그인</h1>
+        <form method='POST' action='/auth/login'>
+            <input type='hidden' name='redirect' value='/oauth/authorize?original_query_params' />
+            <label>이메일: <input type='text' name='email' /></label>
+            <label>비밀번호: <input type='password' name='password' /></label>
+            <button type='submit'>로그인</button>
+        </form>
+        {{#if error}}
+            <p>{{error}}</p>
+        {{/if}}
+    </body>
+</html>

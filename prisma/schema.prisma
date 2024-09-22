@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto]
+}
+
+model User {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String   @unique
+  name        String
+  password    String
+  create_time DateTime @default(now())
+  Board       Board[]
+
+  @@map("user")
+}
+
+model OauthClient {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id     String @unique
+  client_secret String
+  redirect_uris String
+
+  @@map("oauth_client")
+}
+
+model Board {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String   @db.Uuid
+  create_time DateTime @default(now())
+
+  @@map("board")
+}
