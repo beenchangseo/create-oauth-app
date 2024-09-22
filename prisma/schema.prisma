@@ -30,7 +30,7 @@ model OauthClient {
   id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   client_id     String @unique
   client_secret String
-  redirect_uris String
+  client_redirect_uris String
 
   @@map("oauth_client")
 }

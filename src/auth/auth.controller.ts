@@ -39,7 +39,7 @@ export class AuthController {
         }
 
         // 클라이언트의 redirect_uri 검증
-        const redirectUris = client.redirect_uris.split(',');
+        const redirectUris = client.client_redirect_uris.split(',');
         if (!redirectUris.includes(redirect_uri)) {
             throw new CustomUnauthorizedException('Invalid redirect_uri');
         }
@@ -57,7 +57,8 @@ export class AuthController {
         url.searchParams.append('state', state);
 
         return response.render('authorize', {
-            client,
+            client_id,
+            redirect_uri: url,
             scope,
             state,
             response_type,
@@ -86,9 +87,23 @@ export class AuthController {
             throw new CustomUnauthorizedException('Invalid user_id');
         }
 
+        const redirectUrl = new URL(redirect_uri);
         if (action === 'approve') {
             const authCode = await this.authService.createAuthorizationCode(user, client, redirect_uri, scope);
+
+            // 클라이언트의 redirect_uri로 리디렉션
+            redirectUrl.searchParams.append('code', authCode.code);
+            if (state) {
+                redirectUrl.searchParams.append('state', state);
+            }
+
+            return response.redirect(redirectUrl.toString());
         } else {
+            // 거부 시 에러 전달
+            redirectUrl.searchParams.append('error', 'access_denied');
+            if (state) redirectUrl.searchParams.append('state', state);
+
+            return response.redirect(redirectUrl.toString());
         }
     }
 

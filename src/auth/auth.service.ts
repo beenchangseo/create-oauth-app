@@ -61,7 +61,7 @@ export class AuthService {
             scope: scope,
         };
 
-        await this.redisClient.setex(`oauth-authorization-code`, 600000, JSON.stringify(authorizationCode));
+        await this.redisClient.setex(`oauth-authorization-code`, 600, JSON.stringify(authorizationCode));
 
         return authorizationCode;
     }
