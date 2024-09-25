@@ -12,7 +12,7 @@ export class InvalidArgumentException extends BadRequestException {
     constructor(details: Detail[]) {
         super();
         this.errorCode = 'INVALID_ARGUMENT_ERROR';
-        this.message = 'The information you entered is incorrect.';
+        this.message = '입력한 정보가 올바르지 않습니다.';
         this.details = details;
     }
 }

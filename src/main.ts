@@ -14,6 +14,7 @@ import { join } from 'path';
 declare module 'express-session' {
     interface SessionData {
         loginSessionData: {
+            sessionId?: string;
             userId?: string;
             clientId?: string;
             scope?: string;
@@ -40,7 +41,7 @@ async function bootstrap() {
             store: new RedisStore({
                 client: redisClient,
                 prefix: 'oauth-session-',
-                ttl: 30 * 1000,
+                ttl: 60 * 60 * 1000,
             }),
             secret: configService.get('SESSION_SECRET'),
             resave: false,
@@ -48,7 +49,7 @@ async function bootstrap() {
             cookie: {
                 httpOnly: true,
                 secure: false,
-                maxAge: 30 * 1000,
+                maxAge: 60 * 60 * 1000,
             },
         }),
     );

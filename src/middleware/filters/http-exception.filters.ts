@@ -39,6 +39,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 error: exception.errorCode,
                 message: exception.message,
             };
+            console.log(errorResponse);
+            
+            return response.render('error', { status_code: errorResponse.status, error_code: errorResponse.error });
         } else {
             console.error({
                 timestamp: new Date().toISOString(),
@@ -46,6 +49,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 errorResponse,
                 exception,
             });
+        }
+
+        // oauth 로그인 폼 제출 페이지 예외 처리
+        if (request.originalUrl.includes('/auth/login')) {
+            return response.render('login', { error: errorResponse.message });
         }
 
         response.status(status).json(errorResponse);

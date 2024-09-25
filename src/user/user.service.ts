@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SignUpDto } from './user.dto';
 import { User } from '@prisma/client';
-import { genSalt, genSaltSync, hash, hashSync } from 'bcrypt';
+import { genSaltSync, hashSync } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
