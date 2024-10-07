@@ -38,9 +38,9 @@ export class PostAuthorizeDto {
 }
 
 export class LoginDto {
-    @IsEmail({}, {message: '이메일 형식이 올바르지 않습니다.'})
+    @IsEmail({}, { message: '이메일 형식이 올바르지 않습니다.' })
     email: string;
 
-    @IsString({message: '패스워드는 형식이 올바르지 않습니다.'})
+    @IsString({ message: '패스워드는 형식이 올바르지 않습니다.' })
     password: string;
 }

@@ -20,8 +20,9 @@ declare module 'express-session' {
             scope?: string;
             responseType?: string;
             state?: string;
-            next?: 'login-request' | 'authorize' | 'done';
+            next?: 'login' | 'authorize' | 'done';
             originalUrl?: string; // GET /auth/authorize를 호출 할 때 original url + query
+            redirectUrl?: string; // client redirect url
         };
     }
 }
@@ -36,6 +37,12 @@ async function bootstrap() {
     app.setBaseViewsDir(join(__dirname, 'views'));
     app.setViewEngine('hbs');
 
+    app.enableCors({
+        origin: configService.get<string>('FRONTEND_SERVER_DOMAIN'), // Next.js 애플리케이션의 도메인
+        credentials: true,
+        exposedHeaders: ['x-session-expired'], // 노출할 헤더를 지정
+    });
+
     app.use(
         session({
             store: new RedisStore({
@@ -49,7 +56,7 @@ async function bootstrap() {
             cookie: {
                 httpOnly: true,
                 secure: false,
-                maxAge: 60 * 60 * 1000,
+                maxAge: parseInt(configService.get<string>('SESSION_TTL')) * 1000,
             },
         }),
     );

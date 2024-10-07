@@ -1,4 +1,4 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Detail, InvalidArgumentException } from '../../errors/invalidArgumentException';
 import { CustomUnauthorizedException } from '../../errors/unauthorizedException';
@@ -12,6 +12,8 @@ type HttpErrorResponse = {
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+    private readonly logger: Logger = new Logger(HttpException.name);
+
     catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
@@ -39,16 +41,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 error: exception.errorCode,
                 message: exception.message,
             };
-            console.log(errorResponse);
-            
-            return response.render('error', { status_code: errorResponse.status, error_code: errorResponse.error });
-        } else {
-            console.error({
-                timestamp: new Date().toISOString(),
-                path: request.url,
-                errorResponse,
-                exception,
+
+            this.logger.error(errorResponse, exception.stack);
+
+            return response.render('error', {
+                status_code: errorResponse.status,
+                error_code: errorResponse.error,
+                message: errorResponse.message,
             });
+        } else {
+            this.logger.error(errorResponse, (exception as any).stack);
         }
 
         // oauth 로그인 폼 제출 페이지 예외 처리
