@@ -147,7 +147,7 @@ export class AuthController {
     }
 
     @Post('login')
-    async login(@Body() loginDto: LoginDto, @Req() request: Request, @Res() response: Response): Promise<void> {
+    async postLogin(@Body() loginDto: LoginDto, @Req() request: Request, @Res() response: Response): Promise<void> {
         const user = await this.authService.validateUser(loginDto);
         if (user) {
             const loginSession = request.session.loginSessionData;
@@ -214,8 +214,15 @@ export class AuthController {
     }
 
     @Post('sign-up')
-    async signUp(@Body() signUpDto: SignUpDto) {
-        return await this.userService.createUser(signUpDto);
+    async postSignUp(@Body() signUpDto: SignUpDto, @Res() response: Response) {
+        await this.userService.createUser(signUpDto);
+
+        return response.render('signup-done');
+    }
+
+    @Get('sign-up')
+    async getSignUp(@Res() response: Response) {
+        return response.render('signup');
     }
 
     @Get('userinfo')

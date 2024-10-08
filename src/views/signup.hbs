@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Been's OAuth Signup</title>
+        <style>
+            body, html { height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; }
+            .signup-container { max-width: 400px; padding: 1.5rem; background-color: white; border: 1px solid #d1d5db;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); } .signup-container h2 { font-size: 1.5rem; font-weight: bold;
+            text-align: center; color: #1f2937; margin-bottom: 1.5rem; } .input-text { width: 100%; padding: 0.5rem
+            1rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 0.25rem; outline: none; }
+            .button-primary { width: 100%; padding: 0.5rem 0; background-color: #1f2937; color: white; border-radius:
+            0.25rem; cursor: pointer; } .button-primary:hover { background-color: #4b5563; } .divider { border-top: 1px
+            solid #d1d5db; margin: 1rem 0; } .error-message { color: red; }
+        </style>
+    </head>
+    <body>
+        <div class='signup-container'>
+            <form action='/auth/sign-up' method='POST'>
+                <h2>Been's OAuth Sign Up</h2>
+                <input type='text' class='input-text' id='email' name='email' placeholder='이메일' required />
+                <input type='text' class='input-text' id='name' name='name' placeholder='이름' required />
+                <input
+                    type='password'
+                    class='input-text'
+                    id='password'
+                    name='password'
+                    placeholder='비밀번호'
+                    required
+                />
+                <button type='submit' class='button-primary'>
+                    회원가입
+                </button>
+                <div class='divider'></div>
+                <a href="/auth/login">
+                    <button type='button' class='button-primary'>
+                        로그인
+                    </button>
+                </a>
+                {{#if error}}
+                    <p class='error-message'>{{error}}</p>
+                {{/if}}
+            </form>
+        </div>
+    </body>
+</html>

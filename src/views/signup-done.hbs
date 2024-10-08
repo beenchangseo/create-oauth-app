@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>회원가입 완료</title>
+        <style>
+            body, html { height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; }
+            .confirmation-container { max-width: 400px; padding: 1.5rem; background-color: white; border: 1px solid #d1d5db;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
+            .confirmation-container h2 { font-size: 1.5rem; font-weight: bold; color: #1f2937; margin-bottom: 1rem; }
+            .confirmation-container p { font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem; }
+            .button-primary { width: 100%; padding: 0.5rem 0; background-color: #1f2937; color: white; border-radius:
+            0.25rem; cursor: pointer; text-decoration: none; display: inline-block; }
+            .button-primary:hover { background-color: #4b5563; }
+        </style>
+    </head>
+    <body>
+        <div class="confirmation-container">
+            <h2>회원가입을 환영합니다!</h2>
+            <p>이메일 인증 링크를 보내드렸습니다.</p>
+            <p>이메일을 확인하시고, 인증 링크를 클릭하면 회원가입이 완료됩니다.</p>
+            <p>만약 이메일이 도착하지 않았다면, 스팸 폴더를 확인하거나 다시 시도해 주세요.</p>
+            <a href="/auth/resend-verification" class="button-primary">
+                이메일 재전송
+            </a>
+        </div>
+    </body>
+</html>
