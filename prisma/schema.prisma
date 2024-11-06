@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
@@ -22,6 +16,8 @@ model User {
   password       String
   create_time    DateTime @default(now())
   email_verified Boolean  @default(false)
+  Post           Post[]
+
   @@map("user")
 }
 
@@ -32,4 +28,41 @@ model OauthClient {
   client_redirect_uris String
 
   @@map("oauth_client")
+}
+
+model Category {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  keyword String @unique
+  title   String
+
+  posts PostOnCategory[]
+
+  @@map("category")
+}
+
+model Post {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String   @db.Uuid
+  title       String   @unique
+  description String
+  tags        String[]
+  contents    String
+  update_time DateTime @default(now())
+
+  user           User             @relation(fields: [user_id], references: [id])
+  PostOnCategory PostOnCategory[]
+
+  @@map("post")
+}
+
+model PostOnCategory {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  post_id     String @db.Uuid
+  category_id String @db.Uuid
+
+  post     Post     @relation(fields: [post_id], references: [id])
+  category Category @relation(fields: [category_id], references: [id])
+
+  @@unique([post_id, category_id]) // 각 조합이 유일하도록 설정
+  @@map("post_on_category") // 테이블 이름 지정
 }
